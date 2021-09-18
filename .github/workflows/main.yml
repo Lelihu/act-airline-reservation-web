@@ -16,7 +16,7 @@ jobs:
           java-version: '11'
           distribution: 'adopt'
       - name: Build with npm
-        run: npm --batch-mode --update-snapshots verify
+        run: npm  run
   cd:
     needs: ci
     runs-on: ubuntu-latest
