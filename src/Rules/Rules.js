@@ -1,172 +1,116 @@
-import React, {useState, useEffect} from 'react';
-//import TextField from '@material-ui/core/TextField';
-//import Button from '@material-ui/core/Button';
+import * as React from 'react';
+import { styled } from '@material-ui/core/styles';
+import ArrowForwardIosSharpIcon from '@material-ui/icons/ArrowForwardIosSharp';
+import MuiAccordion from '@material-ui/core/Accordion';
+import MuiAccordionSummary from '@material-ui/core/AccordionSummary';
+import MuiAccordionDetails from '@material-ui/core/AccordionDetails';
+import Typography from '@material-ui/core/Typography';
 
-// preferred approach
-import {TextField, Button} from '@material-ui/core';
-
-import {makeStyles} from '@material-ui/core/styles';
-
-import axios from 'axios';
-
-const useStyles = makeStyles(() => ({
-    textField: {
-        margin: 20
-    },
-    button: {
-        margin: 25
-    }
+const Rules = styled((props) => (
+  <MuiAccordion disableGutters elevation={0} square {...props} />
+))(({ theme }) => ({
+  border: `1px solid ${theme.palette.divider}`,
+  '&:not(:last-child)': {
+    borderBottom: 0,
+  },
+  '&:before': {
+    display: 'none',
+  },
 }));
 
-const CreatePassenger = () => {
+const AccordionSummary = styled((props) => (
+  <MuiAccordionSummary
+    expandIcon={<ArrowForwardIosSharpIcon sx={{ fontSize: '0.9rem' }} />}
+    {...props}
+  />
+))(({ theme }) => ({
+  backgroundColor:
+    theme.palette.mode === 'dark'
+      ? 'rgba(255, 255, 255, .05)'
+      : 'rgba(0, 0, 0, .03)',
+  flexDirection: 'row-reverse',
+  '& .MuiAccordionSummary-expandIconWrapper.Mui-expanded': {
+    transform: 'rotate(90deg)',
+  },
+  '& .MuiAccordionSummary-content': {
+    marginLeft: theme.spacing(1),
+  },
+}));
 
-    const classes = useStyles();
+const AccordionDetails = styled(MuiAccordionDetails)(({ theme }) => ({
+  padding: theme.spacing(2),
+  borderTop: '1px solid rgba(0, 0, 0, .125)',
+}));
 
-    const [firstName, setFirstName] = useState('');
-    const [middleName, setMiddleName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [email, setEmail] = useState('');
-    const [dateOfBirth, setDateOfBirth] = useState('01/01/1990');
-    const [pin, setPin] = useState();
-    const [confirmPin, setConfirmPin] = useState();
+export default function CustomizedAccordions() {
+  const [expanded, setExpanded] = React.useState('panel1');
 
-    const [isSubmitClicked, setIsSubmitClicked] = useState(false);
+  const handleChange = (panel) => (event, newExpanded) => {
+    setExpanded(newExpanded ? panel : false);
+  };
 
-    useEffect(() => {
+  return (
+    <div>
+      <Rules expanded={expanded === 'panel1'} onChange={handleChange('panel1')}>
+        <AccordionSummary aria-controls="panel1d-content" id="panel1d-header">
+          <Typography>ACT_ARS_FLIGHT_RULE_1 </Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            The ACT AIRLINE RESERVATIONS SYSTEM provides convenient environment for the customers to book the flights as when and where they require.<br/>
+            After searching, the system display list of available flights and allows customer to choose a particular flight. Then the system checks for <br/>
+            the availability of seats on the flight. If the seats are available then the system allows the passenger to book a seat.
+          </Typography>
+        </AccordionDetails>
+      </Rules>
+      <Rules expanded={expanded === 'panel2'} onChange={handleChange('panel2')}>
+        <AccordionSummary aria-controls="panel2d-content" id="panel2d-header">
+          <Typography>ACT_ARS_FLIGHT_RULE_2</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            To book a flight the system asks the customer to register in to the system by entering his details such as name, address, city, state, credit card number and <br/>
+            contact information. Then it checks the validity of card and book the flight and update the airline database. The system also allows the customer to cancel <br/>
+            his/her reservation, if any problem occurs.
+          </Typography>
+        </AccordionDetails>
+      </Rules>
+      <Rules expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+        <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
+          <Typography>ACT_ARS_FLIGHT_RULE_3</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            the system shall require a user to register, in order to carry out any transactions with it except for checking the availability of tickets. It will ask the <br/>
+            user for the following information or data – a user id (auto), a password, first name, middle name, last name, address, phone number, gender, age, credit card number, <br/>
+            city, country, email
+          </Typography>
+        </AccordionDetails>
+      </Rules>
 
-        if (isSubmitClicked === true) {
-            if (pin === confirmPin) {
-                // axios.post("http://localhost:8080/api/passenger/create",
-                axios.post("https://act-airline-reservation.herokuapp.com/api/passenger/create",
-                    {
-                        "firstName": firstName,
-                        "middleName": middleName,
-                        "lastName": lastName,
-                        "phoneNumber": phoneNumber,
-                        "email": email,
-                        "pin": pin,
-                        "dateOfBirth": dateOfBirth
-                    }
-                )
-                    .then((response) => {
-                            console.log(response.data);
-                            alert("Passenger is created with id: " + response.data.id);
-                        }
-                    )
-                    .catch((error) => {
-                        console.log(error);
-                        //alert(error.error);
-                    })
-                setIsSubmitClicked(false);
-            } else {
-                alert("Pin and confirmed pin are not the same!");
-                setIsSubmitClicked(false);
-            }
-        }
-    }, [firstName, middleName, lastName, phoneNumber, email, pin, confirmPin, dateOfBirth, isSubmitClicked]);
+      <Rules expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+        <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
+          <Typography>ACT_ARS_FLIGHT_RULE_4</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            In case the user buys the ticket, the system accesses his profile and charges the price of the ticket to his credit card number. if a user cancels the ticket, 	the system updates <br/>
+            the database by incrementing the number of available seats and credits the refund amount to the customer's credit card number
+          </Typography>
+        </AccordionDetails>
+      </Rules>
 
-    return (
-        <form>
-            <TextField
-                type={"text"}
-                autoFocus={true}
-                className={classes.textField}
-                label={"First Name"}
-                placeholder={"First Name"}
-                variant={"outlined"}
-                value={firstName}
-                onChange={(event) =>
-                    setFirstName(event.target.value)}
-            />
-
-            <TextField
-                type={"text"}
-                className={classes.textField}
-                label={"Middle Name"}
-                placeholder={"Middle Name"}
-                variant={"outlined"}
-                value={middleName}
-                onChange={(event) =>
-                    setMiddleName(event.target.value)}
-            />
-
-            <TextField
-                type={"text"}
-                className={classes.textField}
-                label={"Last Name"}
-                placeholder={"Last Name"}
-                variant={"outlined"}
-                value={lastName}
-                onChange={(event) =>
-                    setLastName(event.target.value)}
-            />
-
-            <TextField
-                type={"tel"}
-                className={classes.textField}
-                label={"Phone Number"}
-                placeholder={"Phone Number"}
-                variant={"outlined"}
-                value={phoneNumber}
-                onChange={(event) =>
-                    setPhoneNumber(event.target.value)}
-            />
-
-            <TextField
-                type={"email"}
-                className={classes.textField}
-                label={"Email"}
-                placeholder={"Email"}
-                variant={"outlined"}
-                value={email}
-                onChange={(event) =>
-                    setEmail(event.target.value)}
-            />
-
-            <TextField
-                type={"date"}
-                className={classes.textField}
-                //label={"Date of Birth"}
-                placeholder={"Date of Birth"}
-                variant={"outlined"}
-                value={dateOfBirth}
-                onChange={(event) =>
-                    setDateOfBirth(event.target.value)}
-            />
-
-            <TextField
-                type={"number"}
-                className={classes.textField}
-                label={"Pin"}
-                placeholder={"Pin"}
-                variant={"outlined"}
-                value={pin}
-                onChange={(event) =>
-                    setPin(event.target.value)}
-            />
-
-            <TextField
-                type={"number"}
-                className={classes.textField}
-                label={"Confirm Pin"}
-                placeholder={"Confirm Pin"}
-                variant={"outlined"}
-                value={confirmPin}
-                onChange={(event) =>
-                    setConfirmPin(event.target.value)}
-            />
-
-            <Button
-                className={classes.button}
-                variant={"contained"}
-                color={"Primary"}
-                onClick={() => setIsSubmitClicked(true)}
-            >
-                Create Passenger
-            </Button>
-        </form>
-    );
+      <Rules expanded={expanded === 'panel3'} onChange={handleChange('panel3')}>
+        <AccordionSummary aria-controls="panel3d-content" id="panel3d-header">
+          <Typography>ACT_ARS_FLIGHT_RULE_5</Typography>
+        </AccordionSummary>
+        <AccordionDetails>
+          <Typography>
+            a new user would have to register himself with the system by providing personal information, in order to reserve seat. Un registered users have the privilege to checking <br/>
+            the availability of tickets
+          </Typography>
+        </AccordionDetails>
+      </Rules>
+    </div>
+  );
 }
-
-export default CreatePassenger;

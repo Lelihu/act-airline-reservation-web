@@ -1,13 +1,15 @@
 import useAxios from 'axios-hooks';
-import { TableContainer, Table, TableBody, TableRow, TableCell } from '@material-ui/core';
+import { TableContainer, Table, TableHead, TableBody, TableRow, TableCell, CircularProgress } from '@material-ui/core';
 
-import React, {useState, useEffect} from 'react';
+import React,{useState, useEffect,Component} from 'react';
 import {TextField, Button} from '@material-ui/core';
 import {makeStyles} from '@material-ui/core/styles';
-import {useHistory} from 'react-router-dom';
-
+import {useHistory,Redirect } from 'react-router-dom';
+import axios from 'axios';
+import Globals2 from './Globals2';
 import Globals from './Globals';
-
+import Paper from '@material-ui/core/Paper';
+import Box from '@material-ui/core/Box';
 
 const useStyles = makeStyles(() => ({
     textField: {
@@ -18,43 +20,44 @@ const useStyles = makeStyles(() => ({
     }
 }));
 
-const UserLogin = () => {
+const SearchSchedule = () => {
     const classes = useStyles();
     let history = useHistory();
-    const [email, setEmail] = useState('');
-    const [password, setPassword] = useState();
+    const [origin, setOrigin] = useState('');
+    const [destination, setDestination] = useState();
 
 
     const [isSubmitClicked, setIsSubmitClicked] = useState(false);
 
-    const [{ data, loading, error }] = useAxios(`https://act-airline-reservation.herokuapp.com/api/passenger/list`);
+    const [{ data, loading, error }] = useAxios(`https://act-airline-reservation.herokuapp.com/api/schedule/list`);
     var flag=false;
+
     useEffect(() => {
 
         if (isSubmitClicked === true) {
-
                 {
                     data.map((row) => {
-
-                        if ((row.email === email) & (row.password === password)) {
-                            Globals.x=row.id;
+                        if ((row.origin === origin) & (row.destination === destination)) {
+                             Globals2.x=origin;
+                             Globals2.y=destination;
                             flag=true;
+                            history.push('/search2');
                             setIsSubmitClicked(false);
-                            history.push('/create');
-
                         } else {
+
                         }
 
                     })
                 }
-                 if (flag===false)
-                 {
-                     alert("INCORRECT EMAIL OR PASSWORD");
-                     setIsSubmitClicked(false);
-                 }
+            if (flag===false)
+            {
+                alert("YOUR SEARCH RESULT IS NEGATIVE, FLIGHT IS NOT FOUND OR INCORRECT PARAMETERS");
+                setIsSubmitClicked(false);
+            }
+
         }
 
-    }, [email, password,isSubmitClicked]);
+    }, [origin, destination,isSubmitClicked]);
 
     return (
         <form>
@@ -62,30 +65,30 @@ const UserLogin = () => {
                 <Table>
                     <TableBody>
                         <TableRow>
-                            <TableCell> <strong>PASSENGER LOGIN</strong>  </TableCell>
+                            <TableCell> <strong>SEARCH FLIGHT SCHEDULE</strong>  </TableCell>
                         </TableRow>
                         <TableRow>
                             <TableCell>
                                 <TextField
                                     type={"text"}
                                     className={classes.textField}
-                                    label={"Enter Email"}
-                                    placeholder={"Enter Email"}
+                                    label={"Origin City"}
+                                    placeholder={"Origin City"}
                                     variant={"outlined"}
                                     fullWidth
-                                    value={email}
-                                    onChange={(event) => setEmail(event.target.value)}
+                                    value={origin}
+                                    onChange={(event) => setOrigin(event.target.value)}
                                 /> <br/>
 
                                 <TextField
-                                    type={"password"}
+                                    type={"text"}
                                     className={classes.textField}
-                                    label={"Enter Password"}
-                                    placeholder={"Enter Password"}
+                                    label={"Destination City"}
+                                    placeholder={"Destination City"}
                                     variant={"outlined"}
                                     fullWidth
-                                    value={password}
-                                    onChange={(event) =>setPassword(event.target.value)}
+                                    value={destination}
+                                    onChange={(event) =>setDestination(event.target.value)}
                                 /> <br/>
 
                                 <Button
@@ -94,37 +97,27 @@ const UserLogin = () => {
                                     color={"Primary"}
                                     onClick={() => setIsSubmitClicked(true)}
                                 >
-                                    LOGIN
+                                    SEARCH FLIGHT
                                 </Button>
 
                                 <Button
                                     className={classes.button}
                                     variant={"contained"}
                                     color={"Primary"}
-                                    onClick={() => history.push('/')}>
-                                    CANCEL
+                                    onClick={() => history.push('/create')}>
+                                    RETURN BACK
                                 </Button>
                                 <br/>
                             </TableCell>
                         </TableRow>
-
                         <TableRow>
-                        </TableRow>
-                        <TableRow>
-                            <strong>
-                                If you are not a registered customer, <br/>
-                                please register first in order to login<br/>
-                                to the system and make reservation.
-                            </strong>
                         </TableRow>
                     </TableBody>
                 </Table>
             </TableContainer>
         </form>
     );
+
 }
 
-export default UserLogin;
-
-
-
+export default SearchSchedule;

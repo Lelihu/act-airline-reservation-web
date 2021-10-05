@@ -1,172 +1,87 @@
-import React, {useState, useEffect} from 'react';
-//import TextField from '@material-ui/core/TextField';
-//import Button from '@material-ui/core/Button';
-
-// preferred approach
-import {TextField, Button} from '@material-ui/core';
-
-import {makeStyles} from '@material-ui/core/styles';
-
-import axios from 'axios';
-
-const useStyles = makeStyles(() => ({
-    textField: {
-        margin: 20
-    },
-    button: {
-        margin: 25
-    }
-}));
-
-const CreatePassenger = () => {
-
-    const classes = useStyles();
-
-    const [firstName, setFirstName] = useState('');
-    const [middleName, setMiddleName] = useState('');
-    const [lastName, setLastName] = useState('');
-    const [phoneNumber, setPhoneNumber] = useState('');
-    const [email, setEmail] = useState('');
-    const [dateOfBirth, setDateOfBirth] = useState('01/01/1990');
-    const [pin, setPin] = useState();
-    const [confirmPin, setConfirmPin] = useState();
-
-    const [isSubmitClicked, setIsSubmitClicked] = useState(false);
-
-    useEffect(() => {
-
-        if (isSubmitClicked === true) {
-            if (pin === confirmPin) {
-                // axios.post("http://localhost:8080/api/passenger/create",
-                axios.post("https://act-airline-reservation.herokuapp.com/api/passenger/create",
-                    {
-                        "firstName": firstName,
-                        "middleName": middleName,
-                        "lastName": lastName,
-                        "phoneNumber": phoneNumber,
-                        "email": email,
-                        "pin": pin,
-                        "dateOfBirth": dateOfBirth
-                    }
-                )
-                    .then((response) => {
-                            console.log(response.data);
-                            alert("Passenger is created with id: " + response.data.id);
-                        }
-                    )
-                    .catch((error) => {
-                        console.log(error);
-                        //alert(error.error);
-                    })
-                setIsSubmitClicked(false);
-            } else {
-                alert("Pin and confirmed pin are not the same!");
-                setIsSubmitClicked(false);
-            }
-        }
-    }, [firstName, middleName, lastName, phoneNumber, email, pin, confirmPin, dateOfBirth, isSubmitClicked]);
-
-    return (
-        <form>
-            <TextField
-                type={"text"}
-                autoFocus={true}
-                className={classes.textField}
-                label={"First Name"}
-                placeholder={"First Name"}
-                variant={"outlined"}
-                value={firstName}
-                onChange={(event) =>
-                    setFirstName(event.target.value)}
-            />
-
-            <TextField
-                type={"text"}
-                className={classes.textField}
-                label={"Middle Name"}
-                placeholder={"Middle Name"}
-                variant={"outlined"}
-                value={middleName}
-                onChange={(event) =>
-                    setMiddleName(event.target.value)}
-            />
-
-            <TextField
-                type={"text"}
-                className={classes.textField}
-                label={"Last Name"}
-                placeholder={"Last Name"}
-                variant={"outlined"}
-                value={lastName}
-                onChange={(event) =>
-                    setLastName(event.target.value)}
-            />
-
-            <TextField
-                type={"tel"}
-                className={classes.textField}
-                label={"Phone Number"}
-                placeholder={"Phone Number"}
-                variant={"outlined"}
-                value={phoneNumber}
-                onChange={(event) =>
-                    setPhoneNumber(event.target.value)}
-            />
-
-            <TextField
-                type={"email"}
-                className={classes.textField}
-                label={"Email"}
-                placeholder={"Email"}
-                variant={"outlined"}
-                value={email}
-                onChange={(event) =>
-                    setEmail(event.target.value)}
-            />
-
-            <TextField
-                type={"date"}
-                className={classes.textField}
-                //label={"Date of Birth"}
-                placeholder={"Date of Birth"}
-                variant={"outlined"}
-                value={dateOfBirth}
-                onChange={(event) =>
-                    setDateOfBirth(event.target.value)}
-            />
-
-            <TextField
-                type={"number"}
-                className={classes.textField}
-                label={"Pin"}
-                placeholder={"Pin"}
-                variant={"outlined"}
-                value={pin}
-                onChange={(event) =>
-                    setPin(event.target.value)}
-            />
-
-            <TextField
-                type={"number"}
-                className={classes.textField}
-                label={"Confirm Pin"}
-                placeholder={"Confirm Pin"}
-                variant={"outlined"}
-                value={confirmPin}
-                onChange={(event) =>
-                    setConfirmPin(event.target.value)}
-            />
-
-            <Button
-                className={classes.button}
-                variant={"contained"}
-                color={"Primary"}
-                onClick={() => setIsSubmitClicked(true)}
-            >
-                Create Passenger
-            </Button>
-        </form>
-    );
+import * as React from 'react';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import Divider from '@material-ui/core/Divider';
+import ListItemText from '@material-ui/core/ListItemText';
+import ListItemAvatar from '@material-ui/core/ListItemAvatar';
+import Typography from '@material-ui/core/Typography';
+import img1 from './Images/img1.png';
+import img2 from './Images/img2.png';
+import img3 from './Images/img3.png';
+export default function Contacts() {
+  return (
+    <List sx={{ width: '100%', maxWidth: 360, bgcolor: 'background.paper' }}>
+      <ListItem alignItems="flex-start">
+        <ListItemAvatar>
+            <img alt="" src={img2} />
+        </ListItemAvatar>
+        <ListItemText
+          primary="ABEBE KEBEDE"
+          secondary={
+            <React.Fragment>
+              <Typography
+                sx={{ display: 'inline' }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                General Manager<br/>
+                  Mobile - +251911111111 <br/>
+                  Email - abaebe@act.com
+              </Typography>
+              {"------------------------ "}
+            </React.Fragment>
+          }
+        />
+      </ListItem>
+      <Divider variant="inset" component="li" />
+      <ListItem alignItems="flex-start">
+        <ListItemAvatar>
+          <img alt="" src={img1} />
+        </ListItemAvatar>
+        <ListItemText
+          primary="HARON SISAY"
+          secondary={
+            <React.Fragment>
+              <Typography
+                sx={{ display: 'inline' }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                  Customer Services Head<br/>
+                  Mobile - +251911222222 <br/>
+                  Email - haron@act.com
+              </Typography>
+              {"------------------------"}
+            </React.Fragment>
+          }
+        />
+      </ListItem>
+      <Divider variant="inset" component="li" />
+      <ListItem alignItems="flex-start">
+        <ListItemAvatar>
+            <img alt="" src={img3} />
+        </ListItemAvatar>
+        <ListItemText
+          primary="HANA KEBEDE"
+          secondary={
+            <React.Fragment>
+              <Typography
+                sx={{ display: 'inline' }}
+                component="span"
+                variant="body2"
+                color="text.primary"
+              >
+                  Finance Head<br/>
+                  Mobile - +251911333333 <br/>
+                  Email - hana@act.com
+              </Typography>
+              {"------------------------"}
+            </React.Fragment>
+          }
+        />
+      </ListItem>
+    </List>
+  );
 }
-
-export default CreatePassenger;
